@@ -20,10 +20,80 @@ O sistema Arena Beach terá as seguintes funcionalidades:
 
 O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as funcionalidades disponíveis e interagir com o sistema. Para isso, o usuário poderá utilizar o teclado para navegar entre as opções e realizar as ações desejadas. 
 
-### 2.1 Estrutura de dados
+### 2.1 Estrutura de pastas
+
+
+```
+📁ESTRUTURADEDADOSII-GRUPO
+    │
+    ├── arena_beach
+    │   ├── reservas
+    │   │   ├── historico.txt
+    │   │   ├── reservas.c
+    │   │   └── reservas.h
+    │   └──  main.c
+    └── ...   
+
+```
+
+- **reservas.c**: arquivo que contém a implementação das funções relacionadas às reservas.
+- **reservas.h**: arquivo que contém a declaração das funções relacionadas às reservas.
+- **historico.txt**: arquivo que armazena o histórico de reservas realizadas.
+- **main.c**: arquivo que contém a função principal do sistema.
+
+### 2.2 Estrutura de dados
+
 
 #### • Hash
 
 O sistema Arena Beach utiliza, no momento, a Tabela Hash para armazenar as reservas realizadas para o dia atual. A tabela hash é uma estrutura de dados que permite o armazenamento de dados de forma eficiente, permitindo a busca, inserção e remoção de elementos em tempo constante (no caso médio). Dessa forma, a quadra e o horário da reserva são utilizados como chave para a tabela hash, utilizando o método de divisão para calcular o índice da tabela. 
 
+### 3. Participantes
+
+<table align="center">
+  <tr>    
+    <td align="center">
+      <a href="https://github.com/letsticia">
+        <img src="https://avatars.githubusercontent.com/u/126128839?v=4" 
+        width="120px;" alt="Foto de Letícia Gonçalves no GitHub"/><br>
+        <sub>
+          <br>Letícia Gonçalves</br>
+          <b>Git Hub</b>
+         </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/hillaryds">
+        <img src="https://avatars.githubusercontent.com/u/143619299?v=4" 
+        width="120px;" alt="Foto de Hillary Diniz no GitHub"/><br>
+        <sub>
+          <br>Hillary Diniz</br>
+          <b>Testadora</b>
+         </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/claraleal12">
+        <img src="https://avatars.githubusercontent.com/u/147611128?v=4" 
+        width="120px;" alt="Foto de Clara Leal no GitHub"/><br>
+        <sub>
+          <br>Clara Leal</br>
+          <b>Redatora</b>
+         </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/shamyracarvalhoo">
+        <img src="https://avatars.githubusercontent.com/u/147446284?v=4" 
+        width="120px;" alt="Foto de Shamyra Carvalho no GitHub"/><br>
+        <sub>
+          <br>Shamyra Carvalho</br>
+          <b>Codificadora</b>
+         </sub>
+      </a>
+    </td>
+    
+    
+  </tr>
+</table>
 
