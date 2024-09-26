@@ -248,18 +248,18 @@ void tela_edita_reserva(Hash tabela){
 
 }
 
-int main(void){
-    Hash tabela;
-    system("chcp 65001");
-    inicializa_tabela_hash(tabela);
+//int main(void){
+    //Hash tabela;
+    //system("chcp 65001");
+    //inicializa_tabela_hash(tabela);
  
     // linhas de teste
-    Reserva reserva = {"João", "", 1, "16"};
+    //Reserva reserva = {"João", "", 1, "16"};
  
-    insere_reserva(tabela, reserva);
+    //insere_reserva(tabela, reserva);
 
-    Reserva reserva2 = {"Leticia", "", 3 , "20"};
-    insere_reserva(tabela, reserva2);
+    //Reserva reserva2 = {"Leticia", "", 3 , "20"};
+    //insere_reserva(tabela, reserva2);
    
     
     // exibe_horarios_disponiveis(tabela);
@@ -268,7 +268,7 @@ int main(void){
     // exibe_reservas(tabela);
     // tela_busca_reserva(tabela);
     // tela_adicionar_reservas(tabela);
-    exibe_horarios_disponiveis(tabela);
+    //exibe_horarios_disponiveis(tabela);
 
-    return 0;
-}
+    //return 0;
+//}
