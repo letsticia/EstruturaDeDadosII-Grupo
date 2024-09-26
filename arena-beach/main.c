@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "reservas/reservas.c"
+#include "reservas\reservas.c"
 #define SIZE 21
 
 void menu() {
