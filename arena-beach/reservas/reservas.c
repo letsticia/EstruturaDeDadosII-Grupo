@@ -4,8 +4,10 @@
 #include <time.h>
 #include "reservas.h"
 #define SIZE 21
-void inicializa_tabela_hash(Hash tabela){
-    for (int count = 0; count < SIZE; count++){
+void inicializa_tabela_hash(Hash tabela)
+{
+    for (int count = 0; count < SIZE; count++)
+    {
         tabela[count] = NULL;
     }
 }
@@ -13,26 +15,43 @@ void inicializa_tabela_hash(Hash tabela){
 void exibe_horarios_disponiveis(Hash tabela)
 {
 
+    int contagem[21] = {0};
     printf("-----------------------------------------------\n");
     printf("Quadra 1\tQuadra 2\tQuadra 3\n");
     printf("-----------------------------------------------\n\n");
     int count = 0;
-    for (int Horario = 16; Horario <= 22; Horario++){
+    for (int Horario = 16; Horario <= 22; Horario++)
+    {
         count = count + 1;
-        for (int quadra = 0; quadra <= 2; quadra++){
+        for (int quadra = 0; quadra <= 2; quadra++)
+        {
             int pos = chaveia(quadra + 1, Horario);
-            
-
-            if (tabela[pos] == NULL){
+            if (tabela[pos] != NULL && tabela[pos]->quadra == quadra)
+            {
+                if (contagem[pos] == 0)
+                {
+                    int id = count + 7 * quadra;
+                    printf("[%d] ", id);
+                    printf("%d:00\t", Horario);
+                }
+                else
+                {
+                    printf("-----   \t");
+                    contagem[pos] = 1;
+                }
+            }
+            else if (tabela[pos] == NULL || tabela[pos]->quadra != (quadra + 1))
+            {
                 int id = count + 7 * quadra;
                 printf("[%d] ", id);
                 printf("%d:00\t", Horario);
+                contagem[pos] = 1;
             }
             else
             {
                 printf("-----   \t");
+                contagem[pos] = 1;
             }
-
         }
 
         printf("\n");
@@ -40,18 +59,23 @@ void exibe_horarios_disponiveis(Hash tabela)
     printf("-----------------------------------------------\n\n");
 }
 
-void acha_id(Hash tabela, int id_reserva, int* quadra_, int* horario_){
+void acha_id(Hash tabela, int id_reserva, int *quadra_, int *horario_)
+{
     int count = 0;
     int quadra_horario[2];
-    for (int Horario = 16; Horario <= 22; Horario++){
+    for (int Horario = 16; Horario <= 22; Horario++)
+    {
         count = count + 1;
-        for (int quadra = 0; quadra <= 2; quadra++){
+        for (int quadra = 0; quadra <= 2; quadra++)
+        {
 
             int pos = chaveia(quadra + 1, Horario);
 
-            if (tabela[pos] == NULL){
+            if (tabela[pos] == NULL)
+            {
                 int id = count + 7 * quadra;
-                if (id == id_reserva){
+                if (id == id_reserva)
+                {
                     *quadra_ = quadra + 1;
                     *horario_ = Horario;
                     break;
@@ -61,7 +85,8 @@ void acha_id(Hash tabela, int id_reserva, int* quadra_, int* horario_){
     }
 }
 
-int chaveia(int quadra, int horario){
+int chaveia(int quadra, int horario)
+{
     char str_quadra[10];
     char str_horario[10];
 
@@ -72,19 +97,21 @@ int chaveia(int quadra, int horario){
     strcpy(str_concatenado, str_quadra);
     strcat(str_concatenado, str_horario);
 
-    int chave = atoi(str_concatenado); 
+    int chave = atoi(str_concatenado);
 
     return chave % SIZE;
 }
 
-void exibe_informacoes_reserva(Reserva reserva){
+void exibe_informacoes_reserva(Reserva reserva)
+{
     printf("Nome:   \t%s\n", reserva.nome);
     printf("Data:   \t%s\n", reserva.data);
     printf("Quadra: \t%d\n", reserva.quadra);
     printf("Horário:\t%s\n", reserva.horario);
 }
 
-void insere_reserva(Hash tabela, Reserva reserva){
+void insere_reserva(Hash tabela, Reserva reserva)
+{
 
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -93,10 +120,11 @@ void insere_reserva(Hash tabela, Reserva reserva){
     sprintf(data, "%02d/%02d/%04d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
 
     strcpy(reserva.data, data);
-    
+
     int pos = chaveia(reserva.quadra, atoi(reserva.horario));
 
-    if (tabela[pos] == NULL){
+    if (tabela[pos] == NULL)
+    {
         tabela[pos] = (Reserva *)malloc(sizeof(Reserva));
         *tabela[pos] = reserva;
     }
@@ -106,42 +134,52 @@ void insere_reserva(Hash tabela, Reserva reserva){
     }
 }
 
-void remove_reserva(Hash tabela, Reserva reserva){
+void remove_reserva(Hash tabela, Reserva reserva)
+{
     int pos = chaveia(reserva.quadra, atoi(reserva.horario));
 
-    if (tabela[pos] != NULL){
+    if (tabela[pos] != NULL)
+    {
         free(tabela[pos]);
         tabela[pos] = NULL;
     }
-    else{
+    else
+    {
         printf("Este horário não está reservado. %d\n", pos);
     }
 }
 
-Reserva busca_reserva(Hash tabela, Reserva reserva, int * resultado){
+Reserva busca_reserva(Hash tabela, Reserva reserva, int *resultado)
+{
 
     int pos = chaveia(reserva.quadra, atoi(reserva.horario));
 
-    if (tabela[pos] != NULL){
+    if (tabela[pos] != NULL)
+    {
         *resultado = 1;
         return *tabela[pos];
     }
-    else{
+    else
+    {
         *resultado = 0;
         printf("Este horário não está reservado.\n");
     }
 }
 
-void exibe_reservas(Hash tabela){
-    for (int count = 0; count < SIZE; count++){
-        if (tabela[count] != NULL){
+void exibe_reservas(Hash tabela)
+{
+    for (int count = 0; count < SIZE; count++)
+    {
+        if (tabela[count] != NULL)
+        {
             exibe_informacoes_reserva(*tabela[count]);
             printf("\n");
         }
     }
 }
 
-void tela_adicionar_reservas(Hash tabela){
+void tela_adicionar_reservas(Hash tabela)
+{
     Reserva reserva;
     printf("=============================================\n");
     printf("=           Adicionar Reserva               =\n");
@@ -163,10 +201,10 @@ void tela_adicionar_reservas(Hash tabela){
 
     printf("Reserva adicionada com sucesso! Informações:\n");
     exibe_informacoes_reserva(reserva);
-
 }
 
-void tela_busca_reserva(Hash tabela){
+void tela_busca_reserva(Hash tabela)
+{
     Reserva reserva;
     printf("=============================================\n");
     printf("=           Buscar Reserva                  =\n");
@@ -179,16 +217,17 @@ void tela_busca_reserva(Hash tabela){
     scanf("%s", reserva.horario);
     int resultado = 0;
     Reserva busca = busca_reserva(tabela, reserva, &resultado);
-    if (resultado == 1){
+    if (resultado == 1)
+    {
         printf("\n-------------Reserva Encontrada--------------\n");
         exibe_informacoes_reserva(busca);
         printf("----------------------------------------------\n");
         printf("\n");
     }
-
 }
 
-void tela_remove_reserva(Hash tabela){
+void tela_remove_reserva(Hash tabela)
+{
     Reserva reserva;
     printf("=============================================\n");
     printf("=           Remover Reserva                  =\n");
@@ -201,19 +240,20 @@ void tela_remove_reserva(Hash tabela){
     scanf("%s", reserva.horario);
     int resultado = 0;
     Reserva reserva_busca = busca_reserva(tabela, reserva, &resultado);
-    
-    if (resultado == 1){
-        
+
+    if (resultado == 1)
+    {
+
         printf("A seguinte reserva será removida:\n");
         exibe_informacoes_reserva(reserva_busca);
 
         remove_reserva(tabela, reserva_busca);
         printf("Reserva removida com sucesso!\n");
     }
-
 }
 
-void tela_edita_reserva(Hash tabela){
+void tela_edita_reserva(Hash tabela)
+{
     Reserva reserva;
     printf("=============================================\n");
     printf("=           Editar Reserva                   =\n");
@@ -227,9 +267,10 @@ void tela_edita_reserva(Hash tabela){
     int resultado = 0;
 
     Reserva reserva_busca = busca_reserva(tabela, reserva, &resultado);
-    
-    if (resultado == 1){
-        
+
+    if (resultado == 1)
+    {
+
         printf("A seguinte reserva será editada:\n");
         exibe_informacoes_reserva(reserva_busca);
         remove_reserva(tabela, reserva_busca);
@@ -245,30 +286,4 @@ void tela_edita_reserva(Hash tabela){
 
         insere_reserva(tabela, reserva);
     }
-
 }
-
-//int main(void){
-    //Hash tabela;
-    //system("chcp 65001");
-    //inicializa_tabela_hash(tabela);
- 
-    // linhas de teste
-    //Reserva reserva = {"João", "", 1, "16"};
- 
-    //insere_reserva(tabela, reserva);
-
-    //Reserva reserva2 = {"Leticia", "", 3 , "20"};
-    //insere_reserva(tabela, reserva2);
-   
-    
-    // exibe_horarios_disponiveis(tabela);
-    // acha_id(tabela, 15);
-    // tela_edita_reserva(tabela);
-    // exibe_reservas(tabela);
-    // tela_busca_reserva(tabela);
-    // tela_adicionar_reservas(tabela);
-    //exibe_horarios_disponiveis(tabela);
-
-    //return 0;
-//}
