@@ -48,6 +48,70 @@ O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as
 
 O sistema Arena Beach utiliza, no momento, a Tabela Hash para armazenar as reservas realizadas para o dia atual. A tabela hash é uma estrutura de dados que permite o armazenamento de dados de forma eficiente, permitindo a busca, inserção e remoção de elementos em tempo constante (no caso médio). Dessa forma, a quadra e o horário da reserva são utilizados como chave para a tabela hash, utilizando o método de divisão para calcular o índice da tabela. 
 
+
+### 2.3 Funcionamento do sistema
+
+O sistema Arena Beach foi desenvolvido em linguagem C e utiliza a estrutura de dados Tabela Hash para armazenar as reservas realizadas. O sistema permite que o usuário realize as seguintes ações:
+
+```
+============================================================================================
+=                            Bem vindo(a) ao Arena Beach                                   =
+============================================================================================
+                             1 - Exibir Horários Disponíveis
+                             2 - Adicionar Reserva
+                             3 - Remover Reserva
+                             4 - Editar Reserva
+                             5 - Buscar Reserva
+                             6 - Sair
+============================================================================================
+
+```
+###### Menu principal do sistema Arena Beach
+- **Exibir horários disponíveis**: o sistema exibe os horários disponíveis para reserva, considerando as reservas já realizadas.
+- **Adicionar reserva**: o usuário informa o horário e a quadra desejada, bem como os dados do cliente. O sistema verifica se a reserva pode ser realizada e, em caso positivo, armazena as informações na tabela hash.
+- **Remover reserva**: o usuário informa o horário e a quadra da reserva que deseja remover. O sistema verifica se a reserva existe e, em caso positivo, remove as informações da tabela hash.
+- **Editar reserva**: o usuário informa o horário e a quadra da reserva que deseja editar. O sistema verifica se a reserva existe e, em caso positivo, permite a edição dos dados do cliente.
+- **Buscar reserva**: o usuário informa o horário e a quadra da reserva que deseja buscar. O sistema verifica se a reserva existe e, em caso positivo, exibe as informações do cliente.
+- **Sair**: o usuário encerra o programa.
+
+#### 2.3.1 Como compilar e executar o sistema?
+
+Para compilar e executar o sistema Arena Beach, siga os passos abaixo:
+
+1. Clone o repositório do projeto:
+
+```
+git clone https://github.com/letsticia/EstruturaDeDadosII-Grupo.git
+```
+
+2. Acesse a pasta do projeto:
+
+```
+cd EstruturaDeDadosII-Grupo
+```
+
+3. Compile o programa:
+
+```
+gcc -o main main.c
+```
+
+4. Execute o programa:
+
+- Caso esteja utilizando o Windows, execute o comando:
+
+```
+main.exe
+```
+
+- Caso esteja utilizando o Linux, execute o comando:
+
+```
+./main
+```
+
+
+
 ### 3. Participantes
 
 <table align="center">
