@@ -52,7 +52,7 @@ void exibe_informacoes_reserva(Reserva reserva);
  * @param tabela A tabela hash.
  * @param reserva A reserva a ser inserida.
  */
-void insere_reserva(Hash tabela, Reserva reserva);
+void insere_reserva(Hash tabela, Reserva *reserva);
 
 /**
  * Remove uma reserva da tabela hash.

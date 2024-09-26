@@ -110,23 +110,20 @@ void exibe_informacoes_reserva(Reserva reserva)
     printf("Horário:\t%s\n", reserva.horario);
 }
 
-void insere_reserva(Hash tabela, Reserva reserva)
+void insere_reserva(Hash tabela, Reserva * reserva)
 {
 
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
 
-    char data[11];
-    sprintf(data, "%02d/%02d/%04d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
-
-    strcpy(reserva.data, data);
-
-    int pos = chaveia(reserva.quadra, atoi(reserva.horario));
+    int pos = chaveia(reserva->quadra, atoi(reserva->horario));
 
     if (tabela[pos] == NULL)
     {
         tabela[pos] = (Reserva *)malloc(sizeof(Reserva));
-        *tabela[pos] = reserva;
+        tabela[pos] = reserva;
+        sprintf(tabela[pos]->data, "%d/%d/%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+        
     }
     else
     {
@@ -191,13 +188,14 @@ void tela_adicionar_reservas(Hash tabela)
     int id;
     scanf("%d", &id);
 
-    int horario_int = atoi(reserva.horario);
+    int horario_int;
     acha_id(tabela, id, &reserva.quadra, &horario_int);
+    sprintf(reserva.horario, "%d", horario_int);
 
     printf("Digite o nome do cliente: ");
     scanf("%s", reserva.nome);
 
-    insere_reserva(tabela, reserva);
+    insere_reserva(tabela, &reserva);
 
     printf("Reserva adicionada com sucesso! Informações:\n");
     exibe_informacoes_reserva(reserva);
@@ -284,6 +282,6 @@ void tela_edita_reserva(Hash tabela)
         printf("Digite o novo horário: ");
         scanf("%s", reserva.horario);
 
-        insere_reserva(tabela, reserva);
+        insere_reserva(tabela, &reserva);
     }
 }
