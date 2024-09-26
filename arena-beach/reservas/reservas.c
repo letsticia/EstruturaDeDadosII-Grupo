@@ -62,7 +62,7 @@ void exibe_horarios_disponiveis(Hash tabela)
 void acha_id(Hash tabela, int id_reserva, int *quadra_, int *horario_)
 {
     int count = 0;
-    int quadra_horario[2];
+    
     for (int Horario = 16; Horario <= 22; Horario++)
     {
         count = count + 1;
