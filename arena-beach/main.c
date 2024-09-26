@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "C:\Users\shamy\Desktop\estrutura de dados 2\EstruturaDeDadosII-Grupo\arena-beach\reservas\reservas.c"
+#include "reservas\reservas.c"
 #define SIZE 21
 
 void menu() {
