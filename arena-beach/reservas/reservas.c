@@ -119,16 +119,22 @@ void acha_id_disponivel(Hash *tabela, int id_reserva, int *quadra_, int *horario
 void acha_id_indisponivel(Hash *tabela, int id, int *quadra, int *horario)
 {
     int count = 0;
-    for (int i = 0; i < SIZE; i++)
+    
+    for (int Horario = 16; Horario <= 22; Horario++)
     {
-        if ((*tabela)[i] != NULL)
+        count = count + 1;
+        for (int quadra_ = 0; quadra_ <= 2; quadra_++)
         {
-            count++;
-            if (count == id)
+            int pos = chaveia(quadra_ + 1, Horario);
+            if ((*tabela)[pos] != NULL)
             {
-                *quadra = (*tabela)[i]->quadra;
-                *horario = (*tabela)[i]->horario;
-               
+                int id_ = count + 7 * quadra_;
+                if (id_ == id)
+                {
+                    *quadra = quadra_ + 1;
+                    *horario = Horario;
+                    break;
+                }
             }
         }
     }
@@ -183,17 +189,11 @@ Reserva busca_reserva(Hash *tabela, Reserva reserva, int *resultado)
     *resultado = 0;
 }
 
-int edita_reserva(Hash *tabela, Reserva reserva_antiga, Reserva reserva_nova)
+int edita_reserva(Hash *tabela, Reserva *reserva_antiga, Reserva *reserva_nova)
 {
-    int quadra = reserva_antiga.quadra;
-    int horario = reserva_antiga.horario;
-    int pos = chaveia(quadra, horario);
-    if ((*tabela)[pos] != NULL)
-    {
-        (*tabela)[pos] = &reserva_nova;
-        return 1;
-    }
-    return 0;
+    remove_reserva(tabela, *reserva_antiga);
+
+    return insere_reserva(tabela, reserva_nova);
 }
 
 void exibe_informacoes_reserva(Reserva *reserva)
@@ -361,17 +361,19 @@ void tela_edita_reserva(Hash *tabela)
     scanf(" %[^\n]", reserva_nova->nome);
 
 
-    if (edita_reserva(tabela, *reserva_antiga, *reserva_nova))
+    if (edita_reserva(tabela, reserva_antiga, reserva_nova))
     {
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+
+        sprintf(reserva_nova->data, "%d/%d/%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
         printf("Reserva editada com sucesso!\n");
         pausa_programa();
         limpa_tela();
-        insere_reserva(tabela, reserva_nova);
         exibe_informacoes_reserva(reserva_nova);
-        remove_reserva(tabela, *reserva_antiga);
-        
+        printf("A reserva acima foi editada com sucesso!\n");
+        pausa_programa();
         free(reserva_antiga);
-        free(reserva_nova);
     }
     else
     {
@@ -382,18 +384,3 @@ void tela_edita_reserva(Hash *tabela)
     }
 
 }
-
-// int main(void){
-
-//     system("chcp 65001");
-//     Hash tabela;
-
-//     inicializa_tabela_hash(&tabela);
-
-//     tela_adiciona_reserva(&tabela);
-
-//     tela_edita_reserva(&tabela);
-
-//     exibe_horarios_disponiveis(&tabela);
-
-// }

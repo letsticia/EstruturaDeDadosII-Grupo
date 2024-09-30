@@ -82,7 +82,7 @@ Reserva busca_reserva(Hash *tabela, Reserva reserva, int *resultado);
  * @param reserva_nova A nova reserva a ser inserida.
  * @return 1 se a reserva foi editada com sucesso, 0 caso contrário.
  */
-int edita_reserva(Hash *tabela, Reserva reserva_antiga, Reserva reserva_nova);
+int edita_reserva(Hash *tabela, Reserva *reserva_antiga, Reserva *reserva_nova);
 
 /**
  * Exibe as informações de uma reserva.
