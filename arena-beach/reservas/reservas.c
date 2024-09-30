@@ -246,7 +246,7 @@ void tela_adiciona_reserva(Hash *tabela)
 
 void tela_remove_reserva(Hash *tabela)
 {
-    limpa_tela();
+    limpa_tela(); 
     printf("===============================================\n");
     printf("               Remover Reserva\n");
     printf("===============================================\n\n");
@@ -310,25 +310,90 @@ void tela_busca_reserva(Hash *tabela)
         pausa_programa();
     }
 
+}
+
+void tela_edita_reserva(Hash *tabela)
+{
+    limpa_tela();
+    printf("===============================================\n");
+    printf("               Editar Reserva\n");
+    printf("===============================================\n\n");
+
+    Reserva *reserva_antiga = (Reserva *)malloc(sizeof(Reserva));
+    Reserva *reserva_nova = (Reserva *)malloc(sizeof(Reserva));
+    exibe_horarios_indisponiveis(tabela);
+    
+    int id = 0;
+    printf("Digite o ID do horário que deseja editar: ");
+    scanf("%d", &id);
+    acha_id_indisponivel(tabela, id, &reserva_antiga->quadra, &reserva_antiga->horario);
+    int pos = chaveia(reserva_antiga->quadra, reserva_antiga->horario);
+    *reserva_antiga = *(*tabela)[pos];
+
+    printf("A seguinte reserva será editada:\n");
+    exibe_informacoes_reserva(reserva_antiga);
+
+    int opcao;
+
+    printf("Você deseja editar o horário e/ou a quadra?  [1] Sim [2] Não\n");
+    scanf("%d", &opcao);
+
+    switch (opcao)
+    {
+        case(1):
+            exibe_horarios_disponiveis(tabela);
+            printf("Digite o novo ID do horário que deseja reservar: ");
+            scanf("%d", &id);
+            acha_id_disponivel(tabela, id, &reserva_nova->quadra, &reserva_nova->horario);
+            printf("Reservando a Quadra %d às %d:00\n", reserva_nova->quadra, reserva_nova->horario);
+            break;
+        case(2):
+            reserva_nova->quadra = reserva_antiga->quadra;
+            reserva_nova->horario = reserva_antiga->horario;
+            break;
+        default:
+            printf("Opção inválida!\n");
+            break;
+            exit(1);
+    }
+
+    printf("Digite o novo nome do cliente: ");
+    scanf(" %[^\n]", reserva_nova->nome);
+
+
+    if (edita_reserva(tabela, *reserva_antiga, *reserva_nova))
+    {
+        printf("Reserva editada com sucesso!\n");
+        pausa_programa();
+        limpa_tela();
+        insere_reserva(tabela, reserva_nova);
+        exibe_informacoes_reserva(reserva_nova);
+        remove_reserva(tabela, *reserva_antiga);
+        
+        free(reserva_antiga);
+        free(reserva_nova);
+    }
+    else
+    {
+        printf("Erro ao editar reserva!\n");
+        free(reserva_antiga);
+        free(reserva_nova);
+        pausa_programa();
+    }
 
 }
 
+// int main(void){
 
-int main(void){
+//     system("chcp 65001");
+//     Hash tabela;
 
-    system("chcp 65001");
-    Hash tabela;
+//     inicializa_tabela_hash(&tabela);
 
-    inicializa_tabela_hash(&tabela);
+//     tela_adiciona_reserva(&tabela);
 
-    tela_adiciona_reserva(&tabela);
+//     tela_edita_reserva(&tabela);
 
-    exibe_horarios_disponiveis(&tabela);
-    // int pos = chaveia(1, 16);
-    // printf("Reserva na posição %d:\n", pos);
-    tela_busca_reserva(&tabela);
-    // tela_remove_reserva(&tabela);
+//     exibe_horarios_disponiveis(&tabela);
 
-    // exibe_horarios_disponiveis(&tabela);
-
-}
+// }
