@@ -239,7 +239,7 @@ void tela_adiciona_reserva(Hash *tabela)
     else
     {
         printf("Erro ao realizar reserva!\n");
-        free(reserva); // Se a reserva não pôde ser inserida, libere a memória
+        free(reserva); 
         pausa_programa();
     }
 }
@@ -275,27 +275,60 @@ void tela_remove_reserva(Hash *tabela)
     else
     {
         printf("Erro ao remover reserva!\n");
-        free(reserva); // Se a reserva não pôde ser removida, libere a memória
+        free(reserva);
         pausa_programa();
     }
 }
 
+void tela_busca_reserva(Hash *tabela)
+{
+    limpa_tela();
+    printf("===============================================\n");
+    printf("               Buscar Reserva\n");
+    printf("===============================================\n\n");
 
-// int main(void){
+    Reserva *reserva = (Reserva *)malloc(sizeof(Reserva));
+    exibe_horarios_indisponiveis(tabela);
 
-//     system("chcp 65001");
-//     Hash tabela;
+    int id = 0;
+    printf("Digite o ID do horário que deseja buscar: ");
+    scanf("%d", &id);
+    acha_id_indisponivel(tabela, id, &reserva->quadra, &reserva->horario);
+    int resultado;
+    *reserva = busca_reserva(tabela, *reserva, &resultado);
 
-//     inicializa_tabela_hash(&tabela);
+    if (resultado)
+    {
+        printf("Reserva encontrada!\n");
+        exibe_informacoes_reserva(reserva);
+        pausa_programa();
+        limpa_tela();
+    }
+    else
+    {
+        printf("Reserva não encontrada!\n");
+        pausa_programa();
+    }
 
-//     tela_adiciona_reserva(&tabela);
 
-//     exibe_horarios_disponiveis(&tabela);
-//     int pos = chaveia(1, 16);
-//     printf("Reserva na posição %d:\n", pos);
-    
-//     tela_remove_reserva(&tabela);
+}
 
-//     exibe_horarios_disponiveis(&tabela);
 
-// }
+int main(void){
+
+    system("chcp 65001");
+    Hash tabela;
+
+    inicializa_tabela_hash(&tabela);
+
+    tela_adiciona_reserva(&tabela);
+
+    exibe_horarios_disponiveis(&tabela);
+    // int pos = chaveia(1, 16);
+    // printf("Reserva na posição %d:\n", pos);
+    tela_busca_reserva(&tabela);
+    // tela_remove_reserva(&tabela);
+
+    // exibe_horarios_disponiveis(&tabela);
+
+}

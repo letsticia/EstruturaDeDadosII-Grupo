@@ -102,4 +102,10 @@ void tela_adiciona_reserva(Hash *tabela);
  */
 void tela_remove_reserva(Hash *tabela);
 
+/**
+ * Exibe a tela de busca de reserva.
+ * @param tabela A tabela hash contendo as reservas.
+ */
+void tela_busca_reserva(Hash *tabela);
+
 #endif // RESERVAS_H
