@@ -62,7 +62,35 @@ void exibe_horarios_disponiveis(Hash* tabela)
     printf("-----------------------------------------------\n\n");
 }
 
-void acha_id(Hash *tabela, int id_reserva, int *quadra_, int *horario_)
+void exibe_horarios_indisponiveis(Hash* tabela)
+{
+    printf("-----------------------------------------------\n");
+    printf("Quadra 1\tQuadra 2\tQuadra 3\n");
+    printf("-----------------------------------------------\n\n");
+    int count = 0;
+    for (int Horario = 16; Horario <= 22; Horario++)
+    {
+        count = count + 1;
+        for (int quadra = 0; quadra <= 2; quadra++)
+        {
+            int id = count + 7 * quadra;
+            int pos = chaveia(quadra + 1, Horario);
+            if ((*tabela)[pos] != NULL)
+            {
+                printf("[%d] %d:00\t", id, Horario);
+            }
+            else
+            {
+                printf("---------\t");
+            }
+        }
+
+        printf("\n");
+    }
+    printf("-----------------------------------------------\n\n");
+}
+
+void acha_id_disponivel(Hash *tabela, int id_reserva, int *quadra_, int *horario_)
 {
     int count = 0;
     
@@ -86,7 +114,25 @@ void acha_id(Hash *tabela, int id_reserva, int *quadra_, int *horario_)
             }
         }
     }
-}   
+}
+
+void acha_id_indisponivel(Hash *tabela, int id, int *quadra, int *horario)
+{
+    int count = 0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        if ((*tabela)[i] != NULL)
+        {
+            count++;
+            if (count == id)
+            {
+                *quadra = (*tabela)[i]->quadra;
+                *horario = (*tabela)[i]->horario;
+               
+            }
+        }
+    }
+}
 
 int chaveia(int quadra, int horario)
 {
@@ -105,7 +151,6 @@ int insere_reserva(Hash *tabela, Reserva *reserva)
     if ((*tabela)[pos] == NULL)
     {
         (*tabela)[pos] = reserva;
-        printf("na função é %s\n", (*tabela)[pos]->nome);
         return 1;
     }
     return 0;
@@ -176,7 +221,7 @@ void tela_adiciona_reserva(Hash *tabela)
     int id = 0;
     printf("Digite o ID do horário que deseja reservar: ");
     scanf("%d", &id);
-    acha_id(tabela, id, &reserva->quadra, &reserva->horario);
+    acha_id_disponivel(tabela, id, &reserva->quadra, &reserva->horario);
     printf("Reservando a Quadra %d às %d:00\n", reserva->quadra, reserva->horario);
 
     printf("Digite o nome do cliente: ");
@@ -188,6 +233,8 @@ void tela_adiciona_reserva(Hash *tabela)
         pausa_programa();
         limpa_tela();
         exibe_informacoes_reserva(reserva);
+        printf("A reserva acima foi cadastrada com sucesso!\n");
+        pausa_programa();
     }
     else
     {
@@ -197,6 +244,40 @@ void tela_adiciona_reserva(Hash *tabela)
     }
 }
 
+void tela_remove_reserva(Hash *tabela)
+{
+    limpa_tela();
+    printf("===============================================\n");
+    printf("               Remover Reserva\n");
+    printf("===============================================\n\n");
+
+    Reserva *reserva = (Reserva *)malloc(sizeof(Reserva));
+    exibe_horarios_indisponiveis(tabela);
+
+    int id = 0;
+    printf("Digite o ID do horário que deseja remover: ");
+    scanf("%d", &id);
+    acha_id_indisponivel(tabela, id, &reserva->quadra, &reserva->horario);
+    
+    int pos = chaveia(reserva->quadra, reserva->horario);
+    reserva = (*tabela)[pos];
+
+    printf("A seguinte reserva será removida:\n");
+    exibe_informacoes_reserva(reserva);
+
+    if (remove_reserva(tabela, *reserva))
+    {
+        printf("Reserva removida com sucesso!\n");
+        pausa_programa();
+        limpa_tela();
+    }
+    else
+    {
+        printf("Erro ao remover reserva!\n");
+        free(reserva); // Se a reserva não pôde ser removida, libere a memória
+        pausa_programa();
+    }
+}
 
 
 // int main(void){
@@ -212,6 +293,8 @@ void tela_adiciona_reserva(Hash *tabela)
 //     int pos = chaveia(1, 16);
 //     printf("Reserva na posição %d:\n", pos);
     
-//     exibe_informacoes_reserva(tabela[pos]);
+//     tela_remove_reserva(&tabela);
+
+//     exibe_horarios_disponiveis(&tabela);
 
 // }
