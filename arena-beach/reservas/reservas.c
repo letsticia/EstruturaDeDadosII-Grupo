@@ -101,6 +101,33 @@ int remove_reserva(Hash *tabela, Reserva reserva)
     return 0;
 }
 
+
+Reserva busca_reserva(Hash *tabela, Reserva reserva, int *resultado)
+{
+    int quadra = reserva.quadra;
+    int horario = reserva.horario;
+    int pos = chaveia(quadra, horario);
+    if ((*tabela)[pos] != NULL)
+    {
+        *resultado = 1;
+        return *(*tabela)[pos];
+    }
+    *resultado = 0;
+}
+
+int edita_reserva(Hash *tabela, Reserva reserva_antiga, Reserva reserva_nova)
+{
+    int quadra = reserva_antiga.quadra;
+    int horario = reserva_antiga.horario;
+    int pos = chaveia(quadra, horario);
+    if ((*tabela)[pos] != NULL)
+    {
+        (*tabela)[pos] = &reserva_nova;
+        return 1;
+    }
+    return 0;
+}
+
 void exibe_informacoes_reserva(Reserva reserva)
 {
     printf("Nome:   \t%s\n", reserva.nome);
@@ -125,5 +152,28 @@ void exibe_informacoes_reserva(Reserva reserva)
 //     int pos = chaveia(1, 16);
 //     printf("Reserva na posição %d:\n", pos);
 //     exibe_informacoes_reserva(*tabela[pos]);
+
+//     // remove_reserva(&tabela, (Reserva){"João", "10/10/2021", 1, 16});
+
+//     // if (tabela[pos] == NULL)
+//     // {
+//     //     printf("Reserva removida com sucesso!\n");
+//     // }
+//     int resultado;
+//     Reserva reserva = busca_reserva(&tabela, (Reserva){"João", "10/10/2021", 1, 16}, &resultado);
+//     if (resultado)
+//     {
+//         printf("Reserva encontrada:\n");
+//         exibe_informacoes_reserva(reserva);
+//     }
+//     else
+//     {
+//         printf("Reserva não encontrada!\n");
+//     }
+
+//     // edita_reserva(&tabela, (Reserva){"João", "10/10/2021", 1, 16}, (Reserva){"Maria", "10/10/2021", 1, 16});
+
+//     // exibe_horarios_disponiveis(&tabela);
+//     // exibe_informacoes_reserva(*tabela[pos]);
 
 // }

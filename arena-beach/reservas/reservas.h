@@ -70,7 +70,7 @@ int remove_reserva(Hash *tabela, Reserva reserva);
  * @param resultado O endereço de uma variável para armazenar o resultado da busca.
  * @return A reserva encontrada.
  */
-Reserva busca_reserva(Hash tabela, Reserva reserva, int * resultado);
+Reserva busca_reserva(Hash *tabela, Reserva reserva, int * resultado);
 
 /**
  * Exibe todas as reservas na tabela hash.
