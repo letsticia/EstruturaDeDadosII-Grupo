@@ -45,7 +45,7 @@ int chaveia(int quadra, int horario);
  * Exibe as informações de uma reserva.
  * @param reserva A reserva.
  */
-void exibe_informacoes_reserva(Reserva reserva);
+void exibe_informacoes_reserva(Reserva *reserva);
 
 /**
  * Insere uma reserva na tabela hash.
@@ -73,9 +73,10 @@ int remove_reserva(Hash *tabela, Reserva reserva);
 Reserva busca_reserva(Hash *tabela, Reserva reserva, int * resultado);
 
 /**
- * Exibe todas as reservas na tabela hash.
- * @param tabela A tabela hash.
+ * Exibe a tela de adição de reserva.
+ * @param tabela A tabela hash contendo as reservas.
  */
-void exibe_reservas(Hash tabela);
+void tela_adiciona_reserva(Hash *tabela);
+
 
 #endif // RESERVAS_H

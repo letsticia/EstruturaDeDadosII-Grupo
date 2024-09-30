@@ -5,6 +5,24 @@
 #include "reservas.h"
 #define SIZE 21
 
+void limpa_tela()
+{
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
+void pausa_programa()
+{
+    #ifdef _WIN32
+        system("pause");
+    #else
+        printf("Pressione ENTER para continuar...");
+        getchar();
+    #endif
+}
 
 void inicializa_tabela_hash(Hash* tabela)
 {
@@ -77,12 +95,17 @@ int chaveia(int quadra, int horario)
 
 int insere_reserva(Hash *tabela, Reserva *reserva)
 {
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(reserva->data, "%d/%d/%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+
     int quadra = reserva->quadra;
     int horario = reserva->horario;
     int pos = chaveia(quadra, horario);
     if ((*tabela)[pos] == NULL)
     {
         (*tabela)[pos] = reserva;
+        printf("na função é %s\n", (*tabela)[pos]->nome);
         return 1;
     }
     return 0;
@@ -128,12 +151,50 @@ int edita_reserva(Hash *tabela, Reserva reserva_antiga, Reserva reserva_nova)
     return 0;
 }
 
-void exibe_informacoes_reserva(Reserva reserva)
+void exibe_informacoes_reserva(Reserva *reserva)
 {
-    printf("Nome:   \t%s\n", reserva.nome);
-    printf("Data:   \t%s\n", reserva.data);
-    printf("Quadra: \t%d\n", reserva.quadra);
-    printf("Horário:\t%d\n", reserva.horario);
+    printf("===============================================\n");
+    printf("               Informações da Reserva\n");
+    printf("===============================================\n\n");
+    printf("Nome do cliente: %s\n", reserva->nome);
+    printf("Data da reserva: %s\n", reserva->data);
+    printf("Quadra:          %d\n", reserva->quadra);
+    printf("Horário:         %d:00\n", reserva->horario);
+    printf("===============================================\n\n");
+}
+
+void tela_adiciona_reserva(Hash *tabela)
+{
+    limpa_tela();
+    printf("===============================================\n");
+    printf("               Adicionar Reserva\n");
+    printf("===============================================\n\n");
+
+    Reserva *reserva = (Reserva *)malloc(sizeof(Reserva));
+    exibe_horarios_disponiveis(tabela);
+
+    int id = 0;
+    printf("Digite o ID do horário que deseja reservar: ");
+    scanf("%d", &id);
+    acha_id(tabela, id, &reserva->quadra, &reserva->horario);
+    printf("Reservando a Quadra %d às %d:00\n", reserva->quadra, reserva->horario);
+
+    printf("Digite o nome do cliente: ");
+    scanf(" %[^\n]", reserva->nome);
+    
+    if (insere_reserva(tabela, reserva))
+    {
+        printf("Reserva realizada com sucesso!\n");
+        pausa_programa();
+        limpa_tela();
+        exibe_informacoes_reserva(reserva);
+    }
+    else
+    {
+        printf("Erro ao realizar reserva!\n");
+        free(reserva); // Se a reserva não pôde ser inserida, libere a memória
+        pausa_programa();
+    }
 }
 
 
@@ -145,35 +206,12 @@ void exibe_informacoes_reserva(Reserva reserva)
 
 //     inicializa_tabela_hash(&tabela);
 
-//     insere_reserva(&tabela, &(Reserva){"João", "10/10/2021", 1, 16});
+//     tela_adiciona_reserva(&tabela);
 
 //     exibe_horarios_disponiveis(&tabela);
-
 //     int pos = chaveia(1, 16);
 //     printf("Reserva na posição %d:\n", pos);
-//     exibe_informacoes_reserva(*tabela[pos]);
-
-//     // remove_reserva(&tabela, (Reserva){"João", "10/10/2021", 1, 16});
-
-//     // if (tabela[pos] == NULL)
-//     // {
-//     //     printf("Reserva removida com sucesso!\n");
-//     // }
-//     int resultado;
-//     Reserva reserva = busca_reserva(&tabela, (Reserva){"João", "10/10/2021", 1, 16}, &resultado);
-//     if (resultado)
-//     {
-//         printf("Reserva encontrada:\n");
-//         exibe_informacoes_reserva(reserva);
-//     }
-//     else
-//     {
-//         printf("Reserva não encontrada!\n");
-//     }
-
-//     // edita_reserva(&tabela, (Reserva){"João", "10/10/2021", 1, 16}, (Reserva){"Maria", "10/10/2021", 1, 16});
-
-//     // exibe_horarios_disponiveis(&tabela);
-//     // exibe_informacoes_reserva(*tabela[pos]);
+    
+//     exibe_informacoes_reserva(tabela[pos]);
 
 // }
