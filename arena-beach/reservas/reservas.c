@@ -268,6 +268,7 @@ void tela_remove_reserva(Hash *tabela)
     if (remove_reserva(tabela, *reserva))
     {
         printf("Reserva removida com sucesso!\n");
+        free(reserva);
         pausa_programa();
         limpa_tela();
     }
