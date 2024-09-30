@@ -59,8 +59,9 @@ int insere_reserva(Hash *tabela, Reserva *reserva);
  * Remove uma reserva da tabela hash.
  * @param tabela A tabela hash.
  * @param reserva A reserva a ser removida.
+ * @return 1 se a reserva foi removida com sucesso, 0 caso contrário.
  */
-void remove_reserva(Hash tabela, Reserva reserva);
+int remove_reserva(Hash *tabela, Reserva reserva);
 
 /**
  * Busca uma reserva na tabela hash.

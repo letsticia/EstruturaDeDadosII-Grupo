@@ -88,6 +88,19 @@ int insere_reserva(Hash *tabela, Reserva *reserva)
     return 0;
 }
 
+int remove_reserva(Hash *tabela, Reserva reserva)
+{
+    int quadra = reserva.quadra;
+    int horario = reserva.horario;
+    int pos = chaveia(quadra, horario);
+    if ((*tabela)[pos] != NULL)
+    {
+        (*tabela)[pos] = NULL;
+        return 1;
+    }
+    return 0;
+}
+
 void exibe_informacoes_reserva(Reserva reserva)
 {
     printf("Nome:   \t%s\n", reserva.nome);
