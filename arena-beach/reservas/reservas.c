@@ -4,15 +4,17 @@
 #include <time.h>
 #include "reservas.h"
 #define SIZE 21
-void inicializa_tabela_hash(Hash tabela)
+
+
+void inicializa_tabela_hash(Hash* tabela)
 {
     for (int count = 0; count < SIZE; count++)
     {
-        tabela[count] = NULL;
+        (*tabela)[count] = NULL;
     }
 }
 
-void exibe_horarios_disponiveis(Hash tabela)
+void exibe_horarios_disponiveis(Hash* tabela)
 {
 
     int contagem[21] = {0};
@@ -25,32 +27,15 @@ void exibe_horarios_disponiveis(Hash tabela)
         count = count + 1;
         for (int quadra = 0; quadra <= 2; quadra++)
         {
+            int id = count + 7 * quadra;
             int pos = chaveia(quadra + 1, Horario);
-            if (tabela[pos] != NULL && tabela[pos]->quadra == quadra)
+            if ((*tabela)[pos] == NULL)
             {
-                if (contagem[pos] == 0)
-                {
-                    int id = count + 7 * quadra;
-                    printf("[%d] ", id);
-                    printf("%d:00\t", Horario);
-                }
-                else
-                {
-                    printf("-----   \t");
-                    contagem[pos] = 1;
-                }
-            }
-            else if (tabela[pos] == NULL || tabela[pos]->quadra != (quadra + 1))
-            {
-                int id = count + 7 * quadra;
-                printf("[%d] ", id);
-                printf("%d:00\t", Horario);
-                contagem[pos] = 1;
+                printf("[%d] %d:00\t", id, Horario);
             }
             else
             {
-                printf("-----   \t");
-                contagem[pos] = 1;
+                printf("---------\t");
             }
         }
 
@@ -59,7 +44,7 @@ void exibe_horarios_disponiveis(Hash tabela)
     printf("-----------------------------------------------\n\n");
 }
 
-void acha_id(Hash tabela, int id_reserva, int *quadra_, int *horario_)
+void acha_id(Hash *tabela, int id_reserva, int *quadra_, int *horario_)
 {
     int count = 0;
     
@@ -71,7 +56,7 @@ void acha_id(Hash tabela, int id_reserva, int *quadra_, int *horario_)
 
             int pos = chaveia(quadra + 1, Horario);
 
-            if (tabela[pos] == NULL)
+            if ((*tabela)[pos] == NULL)
             {
                 int id = count + 7 * quadra;
                 if (id == id_reserva)
@@ -83,23 +68,24 @@ void acha_id(Hash tabela, int id_reserva, int *quadra_, int *horario_)
             }
         }
     }
-}
+}   
 
 int chaveia(int quadra, int horario)
 {
-    char str_quadra[10];
-    char str_horario[10];
+    return (horario - 16) + 7 * (quadra - 1);
+}
 
-    sprintf(str_quadra, "%d", quadra);
-    sprintf(str_horario, "%d", horario);
-
-    char str_concatenado[20];
-    strcpy(str_concatenado, str_quadra);
-    strcat(str_concatenado, str_horario);
-
-    int chave = atoi(str_concatenado);
-
-    return chave % SIZE;
+int insere_reserva(Hash *tabela, Reserva *reserva)
+{
+    int quadra = reserva->quadra;
+    int horario = reserva->horario;
+    int pos = chaveia(quadra, horario);
+    if ((*tabela)[pos] == NULL)
+    {
+        (*tabela)[pos] = reserva;
+        return 1;
+    }
+    return 0;
 }
 
 void exibe_informacoes_reserva(Reserva reserva)
@@ -107,181 +93,24 @@ void exibe_informacoes_reserva(Reserva reserva)
     printf("Nome:   \t%s\n", reserva.nome);
     printf("Data:   \t%s\n", reserva.data);
     printf("Quadra: \t%d\n", reserva.quadra);
-    printf("Horário:\t%s\n", reserva.horario);
+    printf("Horário:\t%d\n", reserva.horario);
 }
 
-void insere_reserva(Hash tabela, Reserva * reserva)
-{
 
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
 
-    int pos = chaveia(reserva->quadra, atoi(reserva->horario));
+// int main(void){
 
-    if (tabela[pos] == NULL)
-    {
-        tabela[pos] = (Reserva *)malloc(sizeof(Reserva));
-        tabela[pos] = reserva;
-        sprintf(tabela[pos]->data, "%d/%d/%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
-        
-    }
-    else
-    {
-        printf("Este horário não está disponível. %d\n", pos);
-    }
-}
+//     system("chcp 65001");
+//     Hash tabela;
 
-void remove_reserva(Hash tabela, Reserva reserva)
-{
-    int pos = chaveia(reserva.quadra, atoi(reserva.horario));
+//     inicializa_tabela_hash(&tabela);
 
-    if (tabela[pos] != NULL)
-    {
-        free(tabela[pos]);
-        tabela[pos] = NULL;
-    }
-    else
-    {
-        printf("Este horário não está reservado. %d\n", pos);
-    }
-}
+//     insere_reserva(&tabela, &(Reserva){"João", "10/10/2021", 1, 16});
 
-Reserva busca_reserva(Hash tabela, Reserva reserva, int *resultado)
-{
+//     exibe_horarios_disponiveis(&tabela);
 
-    int pos = chaveia(reserva.quadra, atoi(reserva.horario));
+//     int pos = chaveia(1, 16);
+//     printf("Reserva na posição %d:\n", pos);
+//     exibe_informacoes_reserva(*tabela[pos]);
 
-    if (tabela[pos] != NULL)
-    {
-        *resultado = 1;
-        return *tabela[pos];
-    }
-    else
-    {
-        *resultado = 0;
-        printf("Este horário não está reservado.\n");
-    }
-}
-
-void exibe_reservas(Hash tabela)
-{
-    for (int count = 0; count < SIZE; count++)
-    {
-        if (tabela[count] != NULL)
-        {
-            exibe_informacoes_reserva(*tabela[count]);
-            printf("\n");
-        }
-    }
-}
-
-void tela_adicionar_reservas(Hash tabela)
-{
-    Reserva reserva;
-    printf("=============================================\n");
-    printf("=           Adicionar Reserva               =\n");
-    printf("=============================================\n\n");
-
-    exibe_horarios_disponiveis(tabela);
-
-    printf("Digite o ID do horário desejado: ");
-    int id;
-    scanf("%d", &id);
-
-    int horario_int;
-    acha_id(tabela, id, &reserva.quadra, &horario_int);
-    sprintf(reserva.horario, "%d", horario_int);
-
-    printf("Digite o nome do cliente: ");
-    scanf("%s", reserva.nome);
-
-    insere_reserva(tabela, &reserva);
-
-    printf("Reserva adicionada com sucesso! Informações:\n");
-    exibe_informacoes_reserva(reserva);
-}
-
-void tela_busca_reserva(Hash tabela)
-{
-    Reserva reserva;
-    printf("=============================================\n");
-    printf("=           Buscar Reserva                  =\n");
-    printf("=============================================\n\n");
-
-    printf("Digite a quadra: ");
-    scanf("%d", &reserva.quadra);
-
-    printf("Digite o horário: ");
-    scanf("%s", reserva.horario);
-    int resultado = 0;
-    Reserva busca = busca_reserva(tabela, reserva, &resultado);
-    if (resultado == 1)
-    {
-        printf("\n-------------Reserva Encontrada--------------\n");
-        exibe_informacoes_reserva(busca);
-        printf("----------------------------------------------\n");
-        printf("\n");
-    }
-}
-
-void tela_remove_reserva(Hash tabela)
-{
-    Reserva reserva;
-    printf("=============================================\n");
-    printf("=           Remover Reserva                  =\n");
-    printf("=============================================\n\n");
-
-    printf("Digite a quadra: ");
-    scanf("%d", &reserva.quadra);
-
-    printf("Digite o horário: ");
-    scanf("%s", reserva.horario);
-    int resultado = 0;
-    Reserva reserva_busca = busca_reserva(tabela, reserva, &resultado);
-
-    if (resultado == 1)
-    {
-
-        printf("A seguinte reserva será removida:\n");
-        exibe_informacoes_reserva(reserva_busca);
-
-        remove_reserva(tabela, reserva_busca);
-        printf("Reserva removida com sucesso!\n");
-    }
-}
-
-void tela_edita_reserva(Hash tabela)
-{
-    Reserva reserva;
-    printf("=============================================\n");
-    printf("=           Editar Reserva                   =\n");
-    printf("=============================================\n\n");
-
-    printf("Digite a quadra da reserva a ser editada: ");
-    scanf("%d", &reserva.quadra);
-
-    printf("Digite o horário da reserva a ser editada: ");
-    scanf("%s", reserva.horario);
-    int resultado = 0;
-
-    Reserva reserva_busca = busca_reserva(tabela, reserva, &resultado);
-
-    if (resultado == 1)
-    {
-
-        printf("A seguinte reserva será editada:\n");
-        exibe_informacoes_reserva(reserva_busca);
-        remove_reserva(tabela, reserva_busca);
-
-        printf("Digite o nome do cliente: ");
-        scanf("%s", reserva.nome);
-
-        printf("Digite a nova quadra: ");
-        scanf("%d", &reserva.quadra);
-
-        printf("Digite o novo horário: ");
-        scanf("%s", reserva.horario);
-
-        insere_reserva(tabela, &reserva);
-    }
-}
+// }
