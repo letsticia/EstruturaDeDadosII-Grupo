@@ -22,28 +22,32 @@ void menu() {
 int main(void) {
     Hash tabela;
     system("chcp 65001");
-    inicializa_tabela_hash(tabela);
+    inicializa_tabela_hash(&tabela);
     
     int opcao;
     do {
+        limpa_tela();
         menu();
         scanf("%d", &opcao);
+        pausa_programa();
+        limpa_tela();
         
         switch (opcao) {
             case 1:
-                exibe_horarios_disponiveis(tabela);
+                exibe_horarios_disponiveis(&tabela);
+                pausa_programa();
                 break;
             case 2:
-                tela_adicionar_reservas(tabela);
+                tela_adiciona_reserva(&tabela);
                 break;
             case 3:
-                tela_remove_reserva(tabela);
+                tela_remove_reserva(&tabela);
                 break;
             case 4:
-                tela_edita_reserva(tabela);
+                tela_edita_reserva(&tabela);
                 break;
             case 5:
-                tela_busca_reserva(tabela);
+                tela_busca_reserva(&tabela);
                 break;
             case 6:
                 printf("Saindo...\n");
