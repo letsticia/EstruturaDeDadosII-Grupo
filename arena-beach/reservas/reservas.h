@@ -142,4 +142,25 @@ void libera_avl(Node* raiz);
 
 
 
+
+typedef struct NoBinario {
+    Reserva* reserva;
+    struct NoBinario* esquerda;
+    struct NoBinario* direita;
+} NoBinario;
+
+// Função para inserir uma nova reserva na árvore binária
+NoBinario* insere_no_binario(NoBinario* raiz, Reserva* reserva);
+
+// Função para carregar reservas de um arquivo de texto para a árvore binária
+NoBinario* carrega_reservas_anteriores_binario(NoBinario* raiz, const char* nome_arquivo);
+
+// Função para buscar e exibir reservas para um determinado horário
+void busca_por_horario(NoBinario* raiz, int horario);
+
+// Função para exibir uma tela de busca por horário e realizar a pesquisa
+void tela_busca_por_horario(NoBinario* raiz);
+
+
+
 #endif // RESERVAS_H
