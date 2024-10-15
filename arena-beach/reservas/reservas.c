@@ -384,3 +384,223 @@ void tela_edita_reserva(Hash *tabela)
     }
 
 }
+
+
+
+Node* cria_novo_no(Reserva* reserva) {
+    Node* novo = (Node*)malloc(sizeof(Node));
+    novo->reserva = reserva;
+    novo->esquerda = NULL;
+    novo->direita = NULL;
+    novo->altura = 1;  
+    return novo;
+}
+
+
+int altura(Node* no) {
+    if (no == NULL) return 0;
+    return no->altura;
+}
+
+
+int fator_balanceamento(Node* no) {
+    if (no == NULL) return 0;
+    return altura(no->esquerda) - altura(no->direita);
+}
+
+
+Node* rotacao_direita(Node* y) {
+    Node* x = y->esquerda;
+    Node* T2 = x->direita;
+    
+    x->direita = y;
+    y->esquerda = T2;
+    
+    y->altura = 1 + (altura(y->esquerda) > altura(y->direita) ? altura(y->esquerda) : altura(y->direita));
+    x->altura = 1 + (altura(x->esquerda) > altura(x->direita) ? altura(x->esquerda) : altura(x->direita));
+    
+    return x;
+}
+
+
+Node* rotacao_esquerda(Node* x) {
+    Node* y = x->direita;
+    Node* T2 = y->esquerda;
+    
+    y->esquerda = x;
+    x->direita = T2;
+    
+    x->altura = 1 + (altura(x->esquerda) > altura(x->direita) ? altura(x->esquerda) : altura(x->direita));
+    y->altura = 1 + (altura(y->esquerda) > altura(y->direita) ? altura(y->esquerda) : altura(y->direita));
+    
+    return y;
+}
+
+
+Node* insere_no(Node* node, Reserva* reserva) {
+    if (node == NULL)
+        return cria_novo_no(reserva);
+
+ 
+    if (reserva->horario < node->reserva->horario) {
+        node->esquerda = insere_no(node->esquerda, reserva);
+    } else if (reserva->horario > node->reserva->horario) {
+        node->direita = insere_no(node->direita, reserva);
+    } else {
+       
+        if (reserva->quadra < node->reserva->quadra) {
+            node->esquerda = insere_no(node->esquerda, reserva);
+        } else if (reserva->quadra > node->reserva->quadra) {
+            node->direita = insere_no(node->direita, reserva);
+        } else {
+            
+            return node;  
+        }
+    }
+
+
+    node->altura = 1 + (altura(node->esquerda) > altura(node->direita) ? altura(node->esquerda) : altura(node->direita));
+
+ 
+    int balance = fator_balanceamento(node);
+
+
+    if (balance > 1 && reserva->horario < node->esquerda->reserva->horario) {
+        return rotacao_direita(node);
+    }
+
+    if (balance < -1 && reserva->horario > node->direita->reserva->horario) {
+        return rotacao_esquerda(node);
+    }
+
+    if (balance > 1 && reserva->horario > node->esquerda->reserva->horario) {
+        node->esquerda = rotacao_esquerda(node->esquerda);
+        return rotacao_direita(node);
+    }
+
+    if (balance < -1 && reserva->horario < node->direita->reserva->horario) {
+        node->direita = rotacao_direita(node->direita);
+        return rotacao_esquerda(node);
+    }
+
+    return node;
+}
+
+
+Node* carrega_avl_dia_atual(Node* raiz_avl, const char* nome_arquivo) {
+    FILE* arquivo = fopen(nome_arquivo, "r");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo %s\n", nome_arquivo);
+        return NULL;
+    }
+
+    char linha[256];
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char data_atual[11]; 
+    sprintf(data_atual, "%d/%d/%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+
+    while (fgets(linha, sizeof(linha), arquivo)) {
+        Reserva* reserva = (Reserva*)malloc(sizeof(Reserva));
+      
+        sscanf(linha, "Cliente: %[^,], Data: %[^,], Quadra: %d, Horário: %d",
+               reserva->nome, reserva->data, &reserva->quadra, &reserva->horario);
+
+     
+        if (strcmp(reserva->data, data_atual) == 0) {
+           
+            raiz_avl = insere_no(raiz_avl, reserva);
+        } else {
+            free(reserva);  
+        }
+    }
+
+    fclose(arquivo);
+    return raiz_avl;
+}
+
+void transfere_avl_para_hash(Node* raiz_avl, Hash* tabela) {
+    if (raiz_avl != NULL) {
+        transfere_avl_para_hash(raiz_avl->esquerda, tabela);
+        
+
+        insere_reserva(tabela, raiz_avl->reserva);  
+
+        transfere_avl_para_hash(raiz_avl->direita, tabela);
+    }
+}
+
+void salva_historico(Node* raiz_avl, FILE* arquivo) {
+    if (raiz_avl != NULL) {
+        salva_historico(raiz_avl->esquerda, arquivo);
+
+        fprintf(arquivo, "Cliente: %s, Data: %s, Quadra: %d, Horário: %d\n",
+                raiz_avl->reserva->nome, raiz_avl->reserva->data, raiz_avl->reserva->quadra, raiz_avl->reserva->horario);
+
+        salva_historico(raiz_avl->direita, arquivo);
+    }
+}
+
+void salva_historico_atualizado(Node* raiz_avl, const char* nome_arquivo) {
+    FILE* arquivo = fopen(nome_arquivo, "r");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo %s\n", nome_arquivo);
+        return;
+    }
+
+    char** linhas_anteriores = NULL;
+    int total_linhas = 0;
+    char linha[256];
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char data_atual[11];  
+    sprintf(data_atual, "%d/%d/%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+
+  
+    while (fgets(linha, sizeof(linha), arquivo)) {
+        char data_reserva[11];
+        sscanf(linha, "%*[^,], Data: %[^,], %*s", data_reserva);
+        if (strcmp(data_reserva, data_atual) != 0) {
+            linhas_anteriores = realloc(linhas_anteriores, (total_linhas + 1) * sizeof(char*));
+            linhas_anteriores[total_linhas] = strdup(linha);
+            total_linhas++;
+        }
+    }
+    fclose(arquivo);
+
+    arquivo = fopen(nome_arquivo, "w");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo %s\n", nome_arquivo);
+        return;
+    }
+
+    for (int i = 0; i < total_linhas; i++) {
+        fputs(linhas_anteriores[i], arquivo);
+        free(linhas_anteriores[i]);
+    }
+    free(linhas_anteriores);
+
+    salva_historico(raiz_avl, arquivo);
+
+    fclose(arquivo);
+}
+
+
+Node* transfere_para_avl(Hash* tabela, Node* raiz) {
+    for (int i = 0; i < SIZE; i++) {
+        if ((*tabela)[i] != NULL) {
+            raiz = insere_no(raiz, (*tabela)[i]);
+        }
+    }
+    return raiz;
+}
+
+
+void libera_avl(Node* raiz) {
+    if (raiz != NULL) {
+        libera_avl(raiz->esquerda);
+        libera_avl(raiz->direita);
+        free(raiz);
+    }
+}
+
