@@ -1,0 +1,3 @@
+Cliente: Hill, Data: 14/10/2024, Quadra: 1, Horário: 16
+Cliente: Andrey, Data: 14/10/2024, Quadra: 2, Horário: 16
+Cliente: Pedro, Data: 14/10/2024, Quadra: 3, Horário: 16
