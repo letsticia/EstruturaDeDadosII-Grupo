@@ -22,7 +22,11 @@ void menu() {
 int main(void) {
     Hash tabela;
     system("chcp 65001");
+
+    Node * raiz_avl = NULL;
     inicializa_tabela_hash(&tabela);
+    raiz_avl = carrega_avl_dia_atual(raiz_avl, "historico_agendamentos.txt");
+    transfere_avl_para_hash(raiz_avl, &tabela);
     
     int opcao;
     do {
@@ -58,7 +62,24 @@ int main(void) {
         printf("\n");
     } while (opcao != 6);
     
+
+    FILE* arquivo_historico = fopen("historico_agendamentos.txt", "a");
+
+    if (arquivo_historico == NULL) {
+        printf("Erro ao abrir o arquivo!\n");
+        return 1;
+    }
+
+    raiz_avl = transfere_para_avl(&tabela, raiz_avl);
+    
+    salva_historico_atualizado(raiz_avl, "historico_agendamentos.txt");
+
+    fclose(arquivo_historico);
+    libera_avl(raiz_avl);
+    printf("Histórico de agendamentos salvo com sucesso!\n");
+
     return 0;
 }
+
 
  
