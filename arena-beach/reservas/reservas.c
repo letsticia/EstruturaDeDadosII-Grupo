@@ -646,3 +646,96 @@ void libera_avl(Node* raiz) {
     }
 }
 
+
+NoBinario* insere_no_binario(NoBinario* raiz, Reserva* reserva) {
+    if (raiz == NULL) {
+        NoBinario* novo_no = (NoBinario*)malloc(sizeof(NoBinario));
+        novo_no->reserva = reserva;
+        novo_no->esquerda = NULL;
+        novo_no->direita = NULL;
+        return novo_no;
+    }
+
+    if (reserva->horario < raiz->reserva->horario) {
+        raiz->esquerda = insere_no_binario(raiz->esquerda, reserva);
+    } else if (reserva->horario > raiz->reserva->horario) {
+        raiz->direita = insere_no_binario(raiz->direita, reserva);
+    } else {
+        if (reserva->quadra < raiz->reserva->quadra) {
+            raiz->esquerda = insere_no_binario(raiz->esquerda, reserva);
+        } else {
+            raiz->direita = insere_no_binario(raiz->direita, reserva);
+        }
+    }
+
+    return raiz;
+}
+
+NoBinario* carrega_reservas_anteriores_binario(NoBinario* raiz, const char* nome_arquivo) {
+    FILE* arquivo = fopen(nome_arquivo, "r");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo %s\n", nome_arquivo);
+        return raiz;
+    }
+
+    char linha[256];
+    while (fgets(linha, sizeof(linha), arquivo)) {
+        Reserva* reserva = (Reserva*)malloc(sizeof(Reserva));
+        
+        // Modificando o sscanf para capturar corretamente os dados
+        int campos_lidos = sscanf(linha, "Cliente: %49[^,], Data: %10[^,], Quadra: %d, Horário: %d",
+                                  reserva->nome, reserva->data, &reserva->quadra, &reserva->horario);
+        
+        // Verifica se todos os campos foram lidos corretamente
+        if (campos_lidos == 4) {
+            // Insere a reserva lida do arquivo na árvore binária
+            raiz = insere_no_binario(raiz, reserva);
+            printf("Reserva carregada: Nome: %s, Data: %s, Quadra: %d, Horário: %d\n",
+                   reserva->nome, reserva->data, reserva->quadra, reserva->horario);
+        } else {
+            printf("Erro ao ler linha: %s\n", linha);
+            free(reserva); // Libera a memória se a leitura falhar
+        }
+    }
+
+    fclose(arquivo);
+    return raiz;
+}
+
+
+void busca_por_horario(NoBinario* raiz, int horario) {
+    if (raiz == NULL) {
+        return;
+    }
+
+    // Percorre a árvore em ordem para garantir que todas as quadras sejam verificadas
+    busca_por_horario(raiz->esquerda, horario);
+
+    // Se encontrar o horário desejado, exibe a reserva
+    if (raiz->reserva->horario == horario) {
+        printf("Reserva carregada: Nome: %s, Data: %s, Quadra: %d, Horário: %d\n",
+               raiz->reserva->nome, raiz->reserva->data, raiz->reserva->quadra, raiz->reserva->horario);
+    }
+
+    busca_por_horario(raiz->direita, horario);
+}
+
+
+
+void tela_busca_por_horario(NoBinario* raiz){
+    limpa_tela();
+    printf("===============================================\n");
+    printf("          Busca Historico de Reservas\n");
+    printf("===============================================\n\n");
+
+    int id = 0;
+    printf("Digite o horário que deseja pesquisar: ");
+    scanf("%d", &id);
+
+    printf("Buscando reservas para o horário %d:\n", id);
+
+    busca_por_horario(raiz, id);
+
+
+
+}
