@@ -221,6 +221,15 @@ void tela_adiciona_reserva(Hash *tabela)
     int id = 0;
     printf("Digite o ID do horário que deseja reservar: ");
     scanf("%d", &id);
+
+    if ((*tabela)[id-1] != NULL)
+    {
+        printf("Horário indisponível!\n");
+        free(reserva);
+        pausa_programa();
+        return;
+    }
+
     acha_id_disponivel(tabela, id, &reserva->quadra, &reserva->horario);
     printf("Reservando a Quadra %d às %d:00\n", reserva->quadra, reserva->horario);
 
@@ -258,6 +267,14 @@ void tela_remove_reserva(Hash *tabela)
     printf("Digite o ID do horário que deseja remover: ");
     scanf("%d", &id);
     acha_id_indisponivel(tabela, id, &reserva->quadra, &reserva->horario);
+
+    if ((*tabela)[id-1] == NULL)
+    {
+        printf("Nenhuma reserva encontrada!\n");
+        free(reserva);
+        pausa_programa();
+        return;
+    }
     
     int pos = chaveia(reserva->quadra, reserva->horario);
     reserva = (*tabela)[pos];
@@ -294,6 +311,14 @@ void tela_busca_reserva(Hash *tabela)
     printf("Digite o ID do horário que deseja buscar: ");
     scanf("%d", &id);
     acha_id_indisponivel(tabela, id, &reserva->quadra, &reserva->horario);
+
+    if ((*tabela)[id-1] == NULL)
+    {
+        printf("Nenhuma reserva encontrada!\n");
+        free(reserva);
+        pausa_programa();
+        return;
+    }
     int resultado;
     *reserva = busca_reserva(tabela, *reserva, &resultado);
 
@@ -327,6 +352,15 @@ void tela_edita_reserva(Hash *tabela)
     printf("Digite o ID do horário que deseja editar: ");
     scanf("%d", &id);
     acha_id_indisponivel(tabela, id, &reserva_antiga->quadra, &reserva_antiga->horario);
+
+    if ((*tabela)[id-1] == NULL)
+    {
+        printf("Nenhuma reserva encontrada!\n");
+        free(reserva_antiga);
+        free(reserva_nova);
+        pausa_programa();
+        return;
+    }
     int pos = chaveia(reserva_antiga->quadra, reserva_antiga->horario);
     *reserva_antiga = *(*tabela)[pos];
 
@@ -345,6 +379,14 @@ void tela_edita_reserva(Hash *tabela)
             printf("Digite o novo ID do horário que deseja reservar: ");
             scanf("%d", &id);
             acha_id_disponivel(tabela, id, &reserva_nova->quadra, &reserva_nova->horario);
+            if ((*tabela)[id-1] != NULL)
+            {
+                printf("Horário indisponível!\n");
+                free(reserva_antiga);
+                free(reserva_nova);
+                pausa_programa();
+                return;
+            }
             printf("Reservando a Quadra %d às %d:00\n", reserva_nova->quadra, reserva_nova->horario);
             break;
         case(2):
