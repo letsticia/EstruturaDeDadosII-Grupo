@@ -14,7 +14,8 @@ void menu() {
     printf("                             3 - Remover Reserva\n");
     printf("                             4 - Editar Reserva\n");
     printf("                             5 - Buscar Reserva\n");
-    printf("                             6 - Sair\n");
+    printf("                             6 - Buscar histíorico por horário\n");
+    printf("                             7 - Sair\n");
     printf("============================================================================================\n");
     printf("--->  Digite a opção desejada: ");
 }
@@ -27,6 +28,14 @@ int main(void) {
     inicializa_tabela_hash(&tabela);
     raiz_avl = carrega_avl_dia_atual(raiz_avl, "historico_agendamentos.txt");
     transfere_avl_para_hash(raiz_avl, &tabela);
+
+    NoBinario* raiz_binaria = NULL;
+    raiz_binaria = carrega_reservas_anteriores_binario(raiz_binaria, "historico_agendamentos.txt");
+    if (raiz_binaria == NULL) {
+        printf("A árvore está vazia. Nenhuma reserva foi carregada.\n");
+    } else {
+        printf("Reservas carregadas com sucesso.\n");
+    }
     
     int opcao;
     do {
@@ -54,13 +63,17 @@ int main(void) {
                 tela_busca_reserva(&tabela);
                 break;
             case 6:
+                tela_busca_por_horario(raiz_binaria);
+                pausa_programa();
+                break;
+            case 7:
                 printf("Saindo...\n");
                 break;
             default:
                 printf("Opção inválida! Tente novamente.\n");
         }
         printf("\n");
-    } while (opcao != 6);
+    } while (opcao != 7);
     
 
     FILE* arquivo_historico = fopen("historico_agendamentos.txt", "a");
