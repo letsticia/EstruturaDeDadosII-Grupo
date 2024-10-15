@@ -115,4 +115,31 @@ void tela_busca_reserva(Hash *tabela);
 void tela_edita_reserva(Hash *tabela);
 
 
+typedef struct Node {
+    Reserva* reserva;
+    struct Node* esquerda;
+    struct Node* direita;
+    int altura;
+} Node;
+
+
+// Estrutura da tabela hash
+typedef Reserva* Hash[SIZE];
+
+// Funções relacionadas à árvore AVL
+Node* cria_novo_no(Reserva* reserva);
+int altura(Node* no);
+int fator_balanceamento(Node* no);
+Node* rotacao_direita(Node* y);
+Node* rotacao_esquerda(Node* x);
+Node* insere_no(Node* node, Reserva* reserva);
+Node* carrega_avl_dia_atual(Node* raiz_avl, const char* nome_arquivo);
+void transfere_avl_para_hash(Node* raiz_avl, Hash* tabela);
+void salva_historico(Node* raiz_avl, FILE* arquivo);
+void salva_historico_atualizado(Node* raiz_avl, const char* nome_arquivo);
+Node* transfere_para_avl(Hash* tabela, Node* raiz);
+void libera_avl(Node* raiz);
+
+
+
 #endif // RESERVAS_H
