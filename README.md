@@ -28,7 +28,7 @@ O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as
     │
     ├── arena_beach
     │   ├── reservas
-    │   │   ├── historico.txt
+    │   │   ├── historico_agendamentos.txt
     │   │   ├── reservas.c
     │   │   └── reservas.h
     │   └──  main.c
@@ -38,7 +38,7 @@ O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as
 
 - **reservas.c**: arquivo que contém a implementação das funções relacionadas às reservas.
 - **reservas.h**: arquivo que contém a declaração das funções relacionadas às reservas.
-- **historico.txt**: arquivo que armazena o histórico de reservas realizadas.
+- **historico_agendamentos.txt**: arquivo que armazena o histórico de reservas realizadas.
 - **main.c**: arquivo que contém a função principal do sistema.
 
 ### 2.2 Estrutura de dados
@@ -50,7 +50,7 @@ O sistema Arena Beach utiliza, no momento, a Tabela Hash para armazenar as reser
 
 #### • Árvore AVL
 
-O presente sistema utiliza a estrutura de dados Árvore AVL para armazenar os dados do dia atual (da Tabela Hash) e coloca-los em ordem do horário que foi realizada uma reserva. Esses dados são armazenados no arquivo historico.txt, que é atualizado ao sair do aplicativo. A árvore AVL é uma árvore binária de busca balanceada, que garante a altura da árvore logarítmica, permitindo a busca, inserção e remoção de elementos em tempo logarítmico.
+O presente sistema utiliza a estrutura de dados Árvore AVL para armazenar os dados do dia atual (da Tabela Hash) e coloca-los em ordem do horário que foi realizada uma reserva. Esses dados são armazenados no arquivo historico_agendamentos.txt, que é atualizado ao sair do aplicativo. A árvore AVL é uma árvore binária de busca balanceada, que garante a altura da árvore logarítmica, permitindo a busca, inserção e remoção de elementos em tempo logarítmico.
 
 #### • Árvore Binária de Busca
 
