@@ -28,7 +28,7 @@ O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as
     │
     ├── arena_beach
     │   ├── reservas
-    │   │   ├── historico.txt
+    │   │   ├── historico_agendamentos.txt
     │   │   ├── reservas.c
     │   │   └── reservas.h
     │   └──  main.c
@@ -38,7 +38,7 @@ O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as
 
 - **reservas.c**: arquivo que contém a implementação das funções relacionadas às reservas.
 - **reservas.h**: arquivo que contém a declaração das funções relacionadas às reservas.
-- **historico.txt**: arquivo que armazena o histórico de reservas realizadas.
+- **historico_agendamentos.txt**: arquivo que armazena o histórico de reservas realizadas.
 - **main.c**: arquivo que contém a função principal do sistema.
 
 ### 2.2 Estrutura de dados
@@ -47,6 +47,14 @@ O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as
 #### • Hash
 
 O sistema Arena Beach utiliza, no momento, a Tabela Hash para armazenar as reservas realizadas para o dia atual. A tabela hash é uma estrutura de dados que permite o armazenamento de dados de forma eficiente, permitindo a busca, inserção e remoção de elementos em tempo constante (no caso médio). Dessa forma, a quadra e o horário da reserva são utilizados como chave para a tabela hash, utilizando o método de divisão para calcular o índice da tabela. 
+
+#### • Árvore AVL
+
+O presente sistema utiliza a estrutura de dados Árvore AVL para armazenar os dados do dia atual (da Tabela Hash) e coloca-los em ordem do horário que foi realizada uma reserva. Esses dados são armazenados no arquivo historico_agendamentos.txt, que é atualizado ao sair do aplicativo. A árvore AVL é uma árvore binária de busca balanceada, que garante a altura da árvore logarítmica, permitindo a busca, inserção e remoção de elementos em tempo logarítmico.
+
+#### • Árvore Binária de Busca
+
+Além das estruturas anteriores, o Arena Beach utiliza a estrutura de dados Árvore Binária de Busca para pegae os dados dos dias anteriores para que possa ser feito uma busca de todos as reservas já feitas. A árvore binária de busca é uma árvore binária que garante a ordenação dos elementos, permitindo a busca, inserção e remoção de elementos em tempo logarítmico. Entretanto, a principal diferença entre a árvore AVL e a árvore binária de busca é que a árvore AVL é balanceada, enquanto a árvore binária de busca não é balanceada.
 
 
 ### 2.3 Funcionamento do sistema
@@ -62,7 +70,8 @@ O sistema Arena Beach foi desenvolvido em linguagem C e utiliza a estrutura de d
                              3 - Remover Reserva
                              4 - Editar Reserva
                              5 - Buscar Reserva
-                             6 - Sair
+                             6 - Buscar histórico por horário
+                             7 - Sair
 ============================================================================================
 
 ```
@@ -72,6 +81,7 @@ O sistema Arena Beach foi desenvolvido em linguagem C e utiliza a estrutura de d
 - **Remover reserva**: o usuário informa o horário e a quadra da reserva que deseja remover. O sistema verifica se a reserva existe e, em caso positivo, remove as informações da tabela hash.
 - **Editar reserva**: o usuário informa o horário e a quadra da reserva que deseja editar. O sistema verifica se a reserva existe e, em caso positivo, permite a edição dos dados do cliente.
 - **Buscar reserva**: o usuário informa o horário e a quadra da reserva que deseja buscar. O sistema verifica se a reserva existe e, em caso positivo, exibe as informações do cliente.
+- **Buscar histórico por horário**: o usuário informa o horário que deseja buscar no histórico de reservas. O sistema verifica se existem reservas realizadas naquele horário e, em caso positivo, exibe todas as reservas realizadas naquele horário em todos os dias.
 - **Sair**: o usuário encerra o programa.
 
 #### 2.3.1 Como compilar e executar o sistema?
