@@ -70,7 +70,8 @@ O sistema Arena Beach foi desenvolvido em linguagem C e utiliza a estrutura de d
                              3 - Remover Reserva
                              4 - Editar Reserva
                              5 - Buscar Reserva
-                             6 - Sair
+                             6 - Buscar histórico por horário
+                             7 - Sair
 ============================================================================================
 
 ```
@@ -80,6 +81,7 @@ O sistema Arena Beach foi desenvolvido em linguagem C e utiliza a estrutura de d
 - **Remover reserva**: o usuário informa o horário e a quadra da reserva que deseja remover. O sistema verifica se a reserva existe e, em caso positivo, remove as informações da tabela hash.
 - **Editar reserva**: o usuário informa o horário e a quadra da reserva que deseja editar. O sistema verifica se a reserva existe e, em caso positivo, permite a edição dos dados do cliente.
 - **Buscar reserva**: o usuário informa o horário e a quadra da reserva que deseja buscar. O sistema verifica se a reserva existe e, em caso positivo, exibe as informações do cliente.
+- **Buscar histórico por horário**: o usuário informa o horário que deseja buscar no histórico de reservas. O sistema verifica se existem reservas realizadas naquele horário e, em caso positivo, exibe todas as reservas realizadas naquele horário em todos os dias.
 - **Sair**: o usuário encerra o programa.
 
 #### 2.3.1 Como compilar e executar o sistema?
