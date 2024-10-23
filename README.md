@@ -48,11 +48,11 @@ O usuário terá acesso a uma interface (no terminal) onde poderá visualizar as
 
 O sistema Arena Beach utiliza, no momento, a Tabela Hash para armazenar as reservas realizadas para o dia atual. A tabela hash é uma estrutura de dados que permite o armazenamento de dados de forma eficiente, permitindo a busca, inserção e remoção de elementos em tempo constante (no caso médio). Dessa forma, a quadra e o horário da reserva são utilizados como chave para a tabela hash, utilizando o método de divisão para calcular o índice da tabela. 
 
-### • Árvore AVL
+#### • Árvore AVL
 
 O presente sistema utiliza a estrutura de dados Árvore AVL para armazenar os dados do dia atual (da Tabela Hash) e coloca-los em ordem do horário que foi realizada uma reserva. Esses dados são armazenados no arquivo historico.txt, que é atualizado ao sair do aplicativo. A árvore AVL é uma árvore binária de busca balanceada, que garante a altura da árvore logarítmica, permitindo a busca, inserção e remoção de elementos em tempo logarítmico.
 
-### • Árvore Binária de Busca
+#### • Árvore Binária de Busca
 
 Além das estruturas anteriores, o Arena Beach utiliza a estrutura de dados Árvore Binária de Busca para pegae os dados dos dias anteriores para que possa ser feito uma busca de todos as reservas já feitas. A árvore binária de busca é uma árvore binária que garante a ordenação dos elementos, permitindo a busca, inserção e remoção de elementos em tempo logarítmico. Entretanto, a principal diferença entre a árvore AVL e a árvore binária de busca é que a árvore AVL é balanceada, enquanto a árvore binária de busca não é balanceada.
 
