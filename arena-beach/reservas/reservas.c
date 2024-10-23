@@ -219,8 +219,13 @@ void tela_adiciona_reserva(Hash *tabela)
     exibe_horarios_disponiveis(tabela);
 
     int id = 0;
-    printf("Digite o ID do horário que deseja reservar: ");
-    scanf("%d", &id);
+    char id_str[100];
+    do{
+        printf("Digite o ID do horário que deseja reservar: ");
+        scanf(" %99[^\n]", &id_str);
+        pausa_programa();
+    }while(!numero_inteiroc(id_str));
+    id = atoi(id_str);
 
     if ((*tabela)[id-1] != NULL)
     {
@@ -233,8 +238,14 @@ void tela_adiciona_reserva(Hash *tabela)
     acha_id_disponivel(tabela, id, &reserva->quadra, &reserva->horario);
     printf("Reservando a Quadra %d às %d:00\n", reserva->quadra, reserva->horario);
 
-    printf("Digite o nome do cliente: ");
-    scanf(" %[^\n]", reserva->nome);
+
+    do {
+        printf("\nDigite o nome do cliente (apenas letras): ");
+        scanf(" %49[^\n]", reserva->nome);
+        getchar();
+    } while (!contem_apenas_letras(reserva->nome));
+
+    formata_string(reserva->nome);
     
     if (insere_reserva(tabela, reserva))
     {
@@ -264,8 +275,14 @@ void tela_remove_reserva(Hash *tabela)
     exibe_horarios_indisponiveis(tabela);
 
     int id = 0;
-    printf("Digite o ID do horário que deseja remover: ");
-    scanf("%d", &id);
+    char id_str[100];
+    
+    do{
+        printf("Digite o ID do horário que deseja remover (apenas números): ");
+        scanf(" %99[^\n]", &id_str);
+        pausa_programa();
+    }while(!numero_inteiroc(id_str));
+    id = atoi(id_str);
     acha_id_indisponivel(tabela, id, &reserva->quadra, &reserva->horario);
 
     if ((*tabela)[id-1] == NULL)
@@ -308,8 +325,15 @@ void tela_busca_reserva(Hash *tabela)
     exibe_horarios_indisponiveis(tabela);
 
     int id = 0;
-    printf("Digite o ID do horário que deseja buscar: ");
-    scanf("%d", &id);
+    char id_str[100];
+    
+    do{
+        printf("Digite o ID do horário que deseja buscar: ");
+        scanf(" %99[^\n]", &id_str);
+        pausa_programa();
+    }while(!numero_inteiroc(id_str));
+    id = atoi(id_str);
+
     acha_id_indisponivel(tabela, id, &reserva->quadra, &reserva->horario);
 
     if ((*tabela)[id-1] == NULL)
@@ -349,8 +373,15 @@ void tela_edita_reserva(Hash *tabela)
     exibe_horarios_indisponiveis(tabela);
     
     int id = 0;
-    printf("Digite o ID do horário que deseja editar: ");
-    scanf("%d", &id);
+    char id_str[100];
+    
+    do{
+        printf("Digite o ID do horário que deseja editar: \n");
+        scanf(" %99[^\n]", &id_str);
+        pausa_programa();
+    }while(!numero_inteiroc(id_str));
+    id = atoi(id_str);
+
     acha_id_indisponivel(tabela, id, &reserva_antiga->quadra, &reserva_antiga->horario);
 
     if ((*tabela)[id-1] == NULL)
@@ -368,9 +399,15 @@ void tela_edita_reserva(Hash *tabela)
     exibe_informacoes_reserva(reserva_antiga);
 
     int opcao;
+    char op[100];
 
     printf("Você deseja editar o horário e/ou a quadra?  [1] Sim [2] Não\n");
     scanf("%d", &opcao);
+    do{
+        scanf(" %99[^\n]", &op);
+        pausa_programa();
+    }while(!numero_inteiroc(op));
+    opcao = atoi(op);
 
     switch (opcao)
     {
@@ -378,6 +415,11 @@ void tela_edita_reserva(Hash *tabela)
             exibe_horarios_disponiveis(tabela);
             printf("Digite o novo ID do horário que deseja reservar: ");
             scanf("%d", &id);
+            do{
+                scanf(" %99[^\n]", &id_str);
+                pausa_programa();
+            }while(!numero_inteiroc(id_str));
+            id = atoi(id_str);
             acha_id_disponivel(tabela, id, &reserva_nova->quadra, &reserva_nova->horario);
             if ((*tabela)[id-1] != NULL)
             {
@@ -399,8 +441,14 @@ void tela_edita_reserva(Hash *tabela)
             exit(1);
     }
 
-    printf("Digite o novo nome do cliente: ");
-    scanf(" %[^\n]", reserva_nova->nome);
+    do {
+        printf("\nDigite o novo nome do cliente (apenas letras): ");
+        scanf(" %49[^\n]", reserva_nova->nome);
+        getchar();
+    } while (!contem_apenas_letras(reserva_nova->nome));
+
+    formata_string(reserva_nova->nome);
+
 
 
     if (edita_reserva(tabela, reserva_antiga, reserva_nova))
@@ -682,19 +730,19 @@ NoBinario* carrega_reservas_anteriores_binario(NoBinario* raiz, const char* nome
     while (fgets(linha, sizeof(linha), arquivo)) {
         Reserva* reserva = (Reserva*)malloc(sizeof(Reserva));
         
-        // Modificando o sscanf para capturar corretamente os dados
+
         int campos_lidos = sscanf(linha, "Cliente: %49[^,], Data: %10[^,], Quadra: %d, Horário: %d",
                                   reserva->nome, reserva->data, &reserva->quadra, &reserva->horario);
         
-        // Verifica se todos os campos foram lidos corretamente
+        
         if (campos_lidos == 4) {
-            // Insere a reserva lida do arquivo na árvore binária
+            
             raiz = insere_no_binario(raiz, reserva);
             printf("Reserva carregada: Nome: %s, Data: %s, Quadra: %d, Horário: %d\n",
                    reserva->nome, reserva->data, reserva->quadra, reserva->horario);
         } else {
             printf("Erro ao ler linha: %s\n", linha);
-            free(reserva); // Libera a memória se a leitura falhar
+            free(reserva); 
         }
     }
 
@@ -708,10 +756,8 @@ void busca_por_horario(NoBinario* raiz, int horario) {
         return;
     }
 
-    // Percorre a árvore em ordem para garantir que todas as quadras sejam verificadas
     busca_por_horario(raiz->esquerda, horario);
 
-    // Se encontrar o horário desejado, exibe a reserva
     if (raiz->reserva->horario == horario) {
         printf("Reserva carregada: Nome: %s, Data: %s, Quadra: %d, Horário: %d\n",
                raiz->reserva->nome, raiz->reserva->data, raiz->reserva->quadra, raiz->reserva->horario);
@@ -729,13 +775,54 @@ void tela_busca_por_horario(NoBinario* raiz){
     printf("===============================================\n\n");
 
     int id = 0;
-    printf("Digite o horário que deseja pesquisar: ");
-    scanf("%d", &id);
+    char id_str[100];
+    
+    do{
+        printf("Digite o horário que deseja pesquisar (apenas números): ");
+        scanf(" %99[^\n]", &id_str);
+        pausa_programa();
+    }while(!numero_inteiroc(id_str));
+    id = atoi(id_str);
 
     printf("Buscando reservas para o horário %d:\n", id);
 
     busca_por_horario(raiz, id);
 
+}
 
 
+int numero_inteiroc(char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (!isdigit(str[i])) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int contem_apenas_letras(char *str) {
+    for (int index = 0; str[index] != '\0'; index++) {
+        if (!isalpha(str[index]) && str[index] != ' ') {
+            printf("\nEsse campo deve conter apenas letras. Por favor, digite um nome válido\n");
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void formata_string(char *str) {
+    int i;
+    for (i = 0; str[i] != '\0'; i++) {
+        if (i==0){
+            str[0] = toupper(str[0]);
+        }
+        else{
+            if (str[i - 1] == ' ') {
+                str[i] = toupper(str[i]);
+            } 
+            else {
+                str[i] = tolower(str[i]);
+            }
+        }
+    }
 }
