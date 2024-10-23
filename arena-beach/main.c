@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 #include "reservas\reservas.c"
 #define SIZE 21
 
@@ -14,10 +15,9 @@ void menu() {
     printf("                             3 - Remover Reserva\n");
     printf("                             4 - Editar Reserva\n");
     printf("                             5 - Buscar Reserva\n");
-    printf("                             6 - Buscar histíorico por horário\n");
+    printf("                             6 - Buscar histórico por horário\n");
     printf("                             7 - Sair\n");
     printf("============================================================================================\n");
-    printf("--->  Digite a opção desejada: ");
 }
 
 int main(void) {
@@ -38,10 +38,17 @@ int main(void) {
     }
     
     int opcao;
+    char op[100];
     do {
         limpa_tela();
         menu();
-        scanf("%d", &opcao);
+
+        do{
+            printf("--->  Digite a opção desejada (apenas números): ");
+            scanf(" %99[^\n]", &op);
+        }while(!numero_inteiroc(op));
+        opcao = atoi(op);
+        
         pausa_programa();
         limpa_tela();
         
