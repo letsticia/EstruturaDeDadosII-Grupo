@@ -163,4 +163,34 @@ void tela_busca_por_horario(NoBinario* raiz);
 
 
 
+/**
+ * @brief Verifica se uma string contém apenas dígitos.
+ * 
+ * Esta função verifica se todos os caracteres da string são dígitos (0-9).
+ * 
+ * @param[in] str A string a ser verificada.
+ * @return Retorna 1 se a string contém apenas dígitos e 0 caso contrário.
+ */
+int numero_inteiroc(char *str);
+
+
+/**
+ * @brief Verifica se uma string contém apenas letras (alfabéticas).
+ * 
+ * Esta função verifica se todos os caracteres da string são letras (alfabéticas) ou espaços em branco.
+ * 
+ * @param[in] str A string a ser verificada.
+ * @return Retorna 1 se a string contém apenas letras ou espaços em branco, e 0 caso contrário.
+ */
+int contem_apenas_letras(char *str);
+
+/**
+ * @brief Formata uma string para que a primeira letra de cada palavra seja maiúscula e as demais minúsculas.
+ * 
+ * Esta função formata uma string para que a primeira letra de cada palavra seja maiúscula e as demais minúsculas.
+ * 
+ * @param[in,out] str A string a ser formatada.
+ */
+void formata_string(char *str);
+
 #endif // RESERVAS_H
