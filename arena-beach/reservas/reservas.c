@@ -402,7 +402,6 @@ void tela_edita_reserva(Hash *tabela)
     char op[100];
 
     printf("Você deseja editar o horário e/ou a quadra?  [1] Sim [2] Não\n");
-    scanf("%d", &opcao);
     do{
         scanf(" %99[^\n]", &op);
         pausa_programa();
